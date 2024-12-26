@@ -1,0 +1,43 @@
+# Node.js dependencies
+node_modules/
+
+# Debugger configuration files
+.vscode/
+.idea/
+
+# Environment variables (contains sensitive data like API keys)
+.env
+.env.local
+.env.*.local
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build output (for React client)
+build/
+dist/
+
+# Dependency directories for client-side (if using Yarn or NPM)
+client/node_modules/
+
+# Jest test coverage reports
+coverage/
+
+# Next.js build directory (if applicable)
+.next/
+
+# Temporary files
+*.swp
+*.swo
+
+# OS specific files
+.DS_Store
+Thumbs.db
+
+# Optional: Files to exclude if using a service account or API keys
+settelment-webpage-new.json
+
+# Optional: Cloud platform config files (e.g., AWS, GCP)
+*.json

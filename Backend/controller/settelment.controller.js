@@ -8,7 +8,7 @@ import nodemailer from 'nodemailer';
 const authenticateGoogle = async () => {
   try {
     return new google.auth.GoogleAuth({
-      keyFile: './Api/settelment-webpage-new.json',
+      keyFile: process.env.GOOGLE_CLOUD_CREDENTIALS,
       scopes: [
         "https://www.googleapis.com/auth/spreadsheets",
         "https://www.googleapis.com/auth/drive",

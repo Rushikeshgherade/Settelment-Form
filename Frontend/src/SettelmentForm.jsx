@@ -164,7 +164,7 @@ function SettelmentForm() {
     className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
     required
   >
-    <option value="" disabled selected>Select Project</option>
+    <option value="" disabled defaultValue>Select Project</option>
     <option value="ASK">ASK</option>
     <option value="HDFC">HDFC</option>
     <option value="APPI">APPI</option>
@@ -173,7 +173,6 @@ function SettelmentForm() {
     <option value="CHILD RIGHTS">CHILD RIGHTS</option>
   </select>
 </div>
-
 
         <div className="mb-6 ">
           <label htmlFor="prjCode" className="block text-sm font-medium text-gray-600">Project Code</label>
