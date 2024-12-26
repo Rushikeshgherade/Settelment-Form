@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "settelment-form",
+  "private_key_id": "2a084115c8c764ea5768bfaf40063d89f457a427",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDYUvXaJD2Ey1lJ\nfhBokuyjLtvcL/H/pfkPXHExTJC+jEFtdG/BkqAtkjMHy/jD7zj6vpAymDlHj9r4\nNehL2dOtO3gnk4RZZ/SzIu8gIvZjJobV3VhoGN3VlXjDXIWuGT8OlRpZ7/Zz+SHX\nakRbYQKbbyqTaiugwjpmINhLKlLlKZvFSvl/oumAstTIe7J2XbjyA9/j8/G+PAc7\n0FmzBEr/iFY5rSNErkf/cR79CLSMGIsF/slA19muriKt3rV3ngeN4qDDiG9C6lMN\nbiAAjyrUwkJ2/EdTwfo9njcyh4X+e56jZ5+S23vDECvrdDbe4PH4XfOSvYvNFyeq\nRLzcO2zzAgMBAAECggEAI7l3noHTowWOBkQKY6q3568KYg+M8IIxYmcKznBtivpQ\np8nN1vLm/v+g6820lG8CQu6Lk79t3jKUn98PMM+VVIt4qViER9uSHq9LPExp0i//\nnnwCaJaKtAYOPn0eGoVS046uHmIxmi9vdkq3ZTvdGVw/dL7Y26CX0lvkPG2N6Qgr\nGFIER8CFAzr6/AS7qJnaOAd4seu8BQac/4PLK8ynieAXY0hCsyoLaAnVA0YN/lZ9\nYf9XfwfRoeOhNU/4p9a3CV3n6Ic0rbch6Al+obGv8p9hBawMe5smZQmIULKK+pZW\nXDD8ifkMya8wZSp3q7SaRmNv+QFPnwvQR+IpUitxMQKBgQD+qRZIsSQmQbEmkLG7\nCjxbNb+nBExlyzWHXhz9Vlj9vhab2DAYOePdYGQhSzpITrOs44uyRVylDbAv6nKX\nUxCxmnZRHHkc2RO6XSAyfkBXvgSzztJnItOD3qeGWnXzDSBuugYpYWv7bJ1E9nzN\n55b3/MqA9Ny5NSuqGO3AI07eSQKBgQDZdkBcdt1DZ+EzDhhEQ5+t4C34jQwA98/i\nJH/+QUhgJGIQNbz0cXPCxnmnNymHdJz01IrBTRn5hq7rkvnfd0hdlsY8Dq6xdFI3\nuswIETa69IGgzDu06ejDDPWSHOc38gLRzmJR0LQBzHSyrLVx2wRLU6TlNOXkrgaE\nvep1/DMhWwKBgQDKY62PJiF5uhnFcZee8/qV7ribTyI8gGzRYa2edaKSPyGOyBkp\nF9EN3o6Vm0j9sHbBv7IFg3SmxKMy4ZwiweRxkjXYLs3ebHNuWJa/KnGOijkIgiXb\ny+TYV/tCHuDAwrz04ykEeCWuk1rGNTNpHVZxTlnOdUx6cVR7ggZp/mWu6QKBgB3D\ni6ecNUimjTI5uaSOROq9hk1AsOXpBTEEoegg81EFac6iLEygwqFkHP6AFFUP5vOz\nq5IthWKbxpFDuqOVZfg5TMSnlc2ACEjMbmSkRoNsN9nUWk+2vD8GJQ5smlET9MLW\npqpgEGM2orpZ3TPKMFpHBojApr6X+xhsDg08CZuFAoGBAJeMaNlIXRRWM9+ahbPl\n0wu9zJeAiPjluhCkVNeu5a9BvEN2+Ag/DVanJaV1cNIogo9S0cj7uHpnAGD2DyeY\nDa+LhjyahoENU2UAAySp9vUkwg1J3ikUlaETuxH5hvOoWhmy/QqetrddPHr5LU5P\na7sWv47peWOFLsVCffaJP8Ow\n-----END PRIVATE KEY-----\n",
+  "client_email": "rushikeshgherade@settelment-form.iam.gserviceaccount.com",
+  "client_id": "106062353474092496485",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/rushikeshgherade%40settelment-form.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
