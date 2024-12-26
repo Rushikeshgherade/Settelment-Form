@@ -37,7 +37,7 @@ coverage/
 Thumbs.db
 
 # Optional: Files to exclude if using a service account or API keys
-settelment-webpage-new.json
+Api
 
 # Optional: Cloud platform config files (e.g., AWS, GCP)
 *.json
