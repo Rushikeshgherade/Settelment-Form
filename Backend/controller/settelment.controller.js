@@ -4,11 +4,11 @@ import { google } from "googleapis";
 import { Readable } from "stream";
 import nodemailer from 'nodemailer';
 
-// Authenticate with Google APIs
+// Authenticate with Google APIsfrontend
 const authenticateGoogle = async () => {
   try {
     return new google.auth.GoogleAuth({
-      keyFile: process.env.GOOGLE_CLOUD_CREDENTIALS,
+      keyFile: './Api/settelment-webpage-new-f4388b9b36c4.json',
       scopes: [
         "https://www.googleapis.com/auth/spreadsheets",
         "https://www.googleapis.com/auth/drive",
@@ -34,6 +34,7 @@ const upload = multer({ storage });
 const handleFileUpload = upload.array('files');  
 
 
+// Send email function - async email sending
 const sendEmail = async (recipientEmail, subject, message, attachments) => {
   // Create a transporter object using SMTP
   const transporter = nodemailer.createTransport({
@@ -53,7 +54,7 @@ const sendEmail = async (recipientEmail, subject, message, attachments) => {
     attachments: attachments, // Attachments array
   };
 
-  // Send email
+  // Send email asynchronously using the promise-based method
   return transporter.sendMail(mailOptions);
 };
 
@@ -168,7 +169,10 @@ export const addSettelment = async (req, res) => {
     }
 
     try {
-      const { email, name, advSetlDate, area, placeProg, project, prjCode, coversheet, dateProg, progTitle, summary, food, travel, stationery, printing, accom, communication, resource, other, total, inword, vendor, individual, totalAdvTake, receivable } = req.body;
+      const { email, name, advSetlDate, area, placeProg, project,
+         prjCode, coversheet, dateProg, progTitle, summary, food, travel,
+          stationery, printing, accom, communication, resource, other, total, 
+          inword, vendor, individual, totalAdvTake, receivable } = req.body;
 
       // Save settlement data to the database
       const newSettlement = new SettelmentData({
@@ -210,8 +214,14 @@ export const addSettelment = async (req, res) => {
           content: file.buffer,
         }));
   
-        // Send email
-        await sendEmail(email, subject, message, attachments);
+       // Asynchronously send the email without blocking the rest of the code execution
+      sendEmail(email, subject, message, attachments)
+      .then(() => {
+        console.log('Email sent successfully');
+      })
+      .catch((error) => {
+        console.error('Error sending email:', error);
+      });
   
         res.status(201).json({
           message: "Settlement data saved and email sent.",
@@ -229,6 +239,11 @@ export const addSettelment = async (req, res) => {
 
       // Google Sheets update
       await appendToGoogleSheet(savedSettlement);
+
+      res.status(201).json({
+        message: "Settlement data saved, email sent, and background tasks processed.",
+        data: savedSettlement,
+      });
 
     } catch (error) {
       console.error("Error processing settlement data:", error);
