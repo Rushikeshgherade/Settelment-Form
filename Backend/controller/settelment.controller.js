@@ -161,7 +161,6 @@ const appendToGoogleSheet = async (data) => {
 };
 
 
-// Add settlement data
 export const addSettelment = async (req, res) => {
   handleFileUpload(req, res, async (err) => {
     if (err) {
@@ -169,85 +168,61 @@ export const addSettelment = async (req, res) => {
     }
 
     try {
-      const { email, name, advSetlDate, area, placeProg, project,
-         prjCode, coversheet, dateProg, progTitle, summary, food, travel,
-          stationery, printing, accom, communication, resource, other, total, 
-          inword, vendor, individual, totalAdvTake, receivable } = req.body;
+      const {
+        email, name, advSetlDate, area, placeProg, project, prjCode,
+        coversheet, dateProg, progTitle, summary, food, travel,
+        stationery, printing, accom, communication, resource, other, total,
+        inword, vendor, individual, totalAdvTake, receivable
+      } = req.body;
 
       // Save settlement data to the database
       const newSettlement = new SettelmentData({
-        email,
-        name,
-        advSetlDate,
-        area,
-        placeProg,
-        project,
-        prjCode,
-        coversheet,
-        dateProg,
-        progTitle,
-        summary,
-        food,
-        travel,
-        stationery,
-        printing,
-        accom,
-        communication,
-        resource,
-        other,
-        total,
-        inword,
-        vendor,
-        individual,
-        totalAdvTake,
-        receivable,
-        files: [], // Placeholder for file IDs
+        email, name, advSetlDate, area, placeProg, project, prjCode, coversheet,
+        dateProg, progTitle, summary, food, travel, stationery, printing, accom,
+        communication, resource, other, total, inword, vendor, individual, totalAdvTake,
+        receivable, files: []  // Placeholder for file IDs
       });
 
       const savedSettlement = await newSettlement.save();
 
-        // Prepare email details
-        const subject = "Settlement Form Submission Confirmation";
-        const message = `Dear ${name},\n\nThank you for submitting your settlement form. Please find the attached documents.\n\nBest regards,\nYour Organization`;
-        const attachments = req.files.map(file => ({
-          filename: file.originalname,
-          content: file.buffer,
-        }));
-  
-       // Asynchronously send the email without blocking the rest of the code execution
+      // Prepare email details
+      const subject = "Settlement Form Submission Confirmation";
+      const message = `Dear ${name},\n\nThank you for submitting your settlement form. Please find the attached documents.\n\nBest regards,\nYour Organization`;
+      const attachments = req.files.map(file => ({
+        filename: file.originalname,
+        content: file.buffer
+      }));
+
+      // Asynchronously send the email without blocking the rest of the code execution
       sendEmail(email, subject, message, attachments)
-      .then(() => {
-        console.log('Email sent successfully');
-      })
-      .catch((error) => {
-        console.error('Error sending email:', error);
-      });
-  
-        res.status(201).json({
-          message: "Settlement data saved and email sent.",
-          data: savedSettlement,
+        .then(() => {
+          console.log('Email sent successfully');
+        })
+        .catch((error) => {
+          console.error('Error sending email:', error);
         });
 
       // Process files and sheets update in the background
       const auth = await authenticateGoogle();
       const parentFolderId = "1qvtYTfZ_Etl5lvyuZMk_uRaJ4TBIHkha";
 
-        // Upload files to Google Drive
-        const uploadedFileIds = await uploadFilesToDrive(auth, req.files, project, parentFolderId);
-      savedSettlement.files = uploadedFileIds; // Use `files` instead of `file`
+      // Upload files to Google Drive
+      const uploadedFileIds = await uploadFilesToDrive(auth, req.files, project, parentFolderId);
+      savedSettlement.files = uploadedFileIds; // Save file IDs to the database
       await savedSettlement.save();
 
       // Google Sheets update
       await appendToGoogleSheet(savedSettlement);
 
-      res.status(201).json({
+      // Send a single response after everything is completed
+      return res.status(201).json({
         message: "Settlement data saved, email sent, and background tasks processed.",
-        data: savedSettlement,
+        data: savedSettlement
       });
 
     } catch (error) {
       console.error("Error processing settlement data:", error);
-      res.status(500).json({ message: "Error processing settlement data", error: error.message });
+      return res.status(500).json({ message: "Error processing settlement data", error: error.message });
     }
   });
 };

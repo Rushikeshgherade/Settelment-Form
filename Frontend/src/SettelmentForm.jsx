@@ -74,9 +74,10 @@ function SettelmentForm() {
       formDataWithFile.append("files", file);
     });
 
-
+    const apiUrl = import.meta.env.VITE_API_URL;
     try {
-      const response = await axios.post("http://localhost:7889/settelment/addForm",formDataWithFile,{
+      const response =  await axios.post(
+        `${apiUrl}/settelment/addForm`, formDataWithFile,{
         headers: {
           "Content-Type": "multipart/form-data" ,
           },
