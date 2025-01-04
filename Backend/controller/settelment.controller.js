@@ -2,18 +2,16 @@ import SettelmentData from "../model/settelmen.model.js";
 import multer from "multer";
 import { google } from "googleapis";
 import { Readable } from "stream";
-import nodemailer from 'nodemailer';
-
 // Authenticate with Google APIsfrontend
 const authenticateGoogle = async () => {
   try {
     return new google.auth.GoogleAuth({
-      keyFile: './Api/settelment-webpage-new-f4388b9b36c4.json',
+      keyFile: './Api/settelment-webpage-new-cfbfa73b628f.json',
       scopes: [
         "https://www.googleapis.com/auth/spreadsheets",
         "https://www.googleapis.com/auth/drive",
       ],
-    });
+    });   
   } catch (error) {
     console.error('Error authenticating with Google:', error);
     throw new Error('Google authentication failed');
@@ -33,49 +31,24 @@ const storage = multer.memoryStorage();
 const upload = multer({ storage });
 const handleFileUpload = upload.array('files');  
 
-
-// Send email function - async email sending
-const sendEmail = async (recipientEmail, subject, message, attachments) => {
-  // Create a transporter object using SMTP
-  const transporter = nodemailer.createTransport({
-    service: 'gmail', // Use your email service
-    auth: {
-      user: process.env.EMAIL_USER, // Your email address
-      pass: process.env.EMAIL_PASS, // Your email password or app password
-    },
-  });
-
-  // Email options
-  const mailOptions = {
-    from: process.env.EMAIL_USER,
-    to: recipientEmail,
-    subject: subject,
-    text: message,
-    attachments: attachments, // Attachments array
-  };
-
-  // Send email asynchronously using the promise-based method
-  return transporter.sendMail(mailOptions);
-};
-
 // Check if folder exists and create it if not
-const getOrCreateFolder = async (auth, projectName, parentFolderId) => {
+const getOrCreateSubFolder = async (auth, folderName, parentFolderId) => {
   const drive = google.drive({ version: 'v3', auth });
 
-  // Search for an existing folder with the project name
+  // Search for an existing folder with the given name in the parent folder
   const res = await drive.files.list({
-    q: `'${parentFolderId}' in parents and name = '${projectName}' and mimeType = 'application/vnd.google-apps.folder'`,
+    q: `'${parentFolderId}' in parents and name = '${folderName}' and mimeType = 'application/vnd.google-apps.folder'`,
     fields: 'files(id, name)',
   });
 
-  // If the folder exists, return the folder ID
+  // If the folder exists, return its ID
   if (res.data.files.length > 0) {
     return res.data.files[0].id;
   }
 
   // If the folder doesn't exist, create it
   const folderMetadata = {
-    name: projectName,
+    name: folderName,
     mimeType: 'application/vnd.google-apps.folder',
     parents: [parentFolderId],
   };
@@ -89,21 +62,27 @@ const getOrCreateFolder = async (auth, projectName, parentFolderId) => {
 };
 
 // Upload multiple files to Google Drive in parallel
-const uploadFilesToDrive = async (auth, files, projectName, parentFolderId) => {
+// Upload files with folder structure: project > person name
+const uploadFilesToDriveWithStructure = async (auth, files, projectName, personName, parentFolderId) => {
   const drive = google.drive({ version: 'v3', auth });
 
-   // Get or create the folder for the project
-   const folderId = await getOrCreateFolder(auth, projectName, parentFolderId);
+  // Get or create the project folder
+  const projectFolderId = await getOrCreateSubFolder(auth, projectName, parentFolderId);
 
+  // Get or create the person's folder within the project folder
+  const personFolderId = await getOrCreateSubFolder(auth, personName, projectFolderId);
+
+  // Upload files to the person's folder
   const uploadPromises = files.map(file => {
     const fileMetadata = {
       name: file.originalname,
-      parents: [folderId],
+      parents: [personFolderId],
     };
     const media = {
       mimeType: file.mimetype,
       body: bufferToStream(file.buffer),
     };
+
     return drive.files.create({
       resource: fileMetadata,
       media,
@@ -185,38 +164,22 @@ export const addSettelment = async (req, res) => {
 
       const savedSettlement = await newSettlement.save();
 
-      // Prepare email details
-      const subject = "Settlement Form Submission Confirmation";
-      const message = `Dear ${name},\n\nThank you for submitting your settlement form. Please find the attached documents.\n\nBest regards,\nYour Organization`;
-      const attachments = req.files.map(file => ({
-        filename: file.originalname,
-        content: file.buffer
-      }));
-
-      // Asynchronously send the email without blocking the rest of the code execution
-      sendEmail(email, subject, message, attachments)
-        .then(() => {
-          console.log('Email sent successfully');
-        })
-        .catch((error) => {
-          console.error('Error sending email:', error);
-        });
 
       // Process files and sheets update in the background
       const auth = await authenticateGoogle();
       const parentFolderId = "1qvtYTfZ_Etl5lvyuZMk_uRaJ4TBIHkha";
 
-      // Upload files to Google Drive
-      const uploadedFileIds = await uploadFilesToDrive(auth, req.files, project, parentFolderId);
-      savedSettlement.files = uploadedFileIds; // Save file IDs to the database
-      await savedSettlement.save();
+       // Upload files to Google Drive
+       const uploadedFileIds = await uploadFilesToDriveWithStructure(auth, req.files, project, name, parentFolderId);
+       savedSettlement.files = uploadedFileIds; // Save file IDs to the database
+       await savedSettlement.save();
 
       // Google Sheets update
       await appendToGoogleSheet(savedSettlement);
 
       // Send a single response after everything is completed
       return res.status(201).json({
-        message: "Settlement data saved, email sent, and background tasks processed.",
+        message: "Settlement data saved,tasks processed.",
         data: savedSettlement
       });
 

@@ -53,7 +53,10 @@ function Demo() {
             <span className="text-blue-600 font-bold">Project Code:</span> ISP/45/2024
           </p>
           <p className="mb-2">
-            <span className="text-blue-600 font-bold">Date Of Program:</span> 25/10/2036
+            <span className="text-blue-600 font-bold">Date Of Program(from/on):</span> 25/10/2036
+          </p>
+          <p className="mb-2">
+            <span className="text-blue-600 font-bold">Date Of Program(To):</span> 25/10/2036
           </p>
           <p className="mb-2">
             <span className="text-blue-600 font-bold">Coversheet Number:</span> 451278

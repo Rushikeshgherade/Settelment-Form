@@ -5,7 +5,7 @@ import axios from "axios"
 
 function SettelmentForm() {
   const [formData, setFormData] = useState({
-    email: "rushigherade420@gmail.com",
+    email: "",
     name: "",
     advSetlDate: "",
     area: "",
@@ -14,6 +14,7 @@ function SettelmentForm() {
     prjCode: "",
     coversheet: "",
     dateProg: "",
+    ToDate: "-",
     progTitle: "",
     summary: "",
     food: "0",
@@ -31,6 +32,7 @@ function SettelmentForm() {
     totalAdvTake: "0",
     receivable: "0",
   });
+  const [isMultiDay, setIsMultiDay] = useState(false); // State for checkbox
     const navigate = useNavigate();
     const [files, setFiles] = useState([]);
 
@@ -50,6 +52,11 @@ function SettelmentForm() {
               return sum + parseFloat(updatedFormData[key] || 0);
             }, 0);
           }
+
+          // Calculate receivable/payable based on totalAdvanceTaken and individual expenses
+      if (name === "totalAdvTake" || name === "individual") {
+        updatedFormData.receivable = parseFloat(updatedFormData.totalAdvTake || 0) - parseFloat(updatedFormData.individual || 0);
+      }
       
           return updatedFormData;
         });
@@ -97,14 +104,14 @@ function SettelmentForm() {
           <img src={logo} alt="yuva logo" className='mt-7 md:mt-0'/>
         </div>
         <div> 
-          <h2 className="text-2xl mt-6 font-bold font text-center md:text-[40px] text-[#FF4C4C]  mb-0">Expanditure Settelment Form</h2>
-        <p className=' text-center mb-6 font-semibold md:text-[20px] mt-2'>YOUTH FOR UNITY AND VOULUNTARY ACTION</p></div>
+          <h2 className="text-2xl mt-6 font-bold font text-center md:text-[40px] text-[#FF4C4C]  mb-0">YOUTH FOR UNITY AND VOULUNTARY ACTION</h2>
+        <p className=' text-center mb-6 text-[20px] font-semibold md:text-[30px] mt-2'>Expanditure Settelment Form</p></div>
         </div>  
 
         <hr className="border-t-2 border-white my-4" />
 
         <form onSubmit={handleSubmit}  >
-            <div className=' md:grid grid-cols-2 gap-4'>
+        <div className=' md:grid grid-cols-2 gap-4'>
             <div className="mb-4  ">
                 <label htmlFor="email" className="block text-sm font-medium text-gray-600">Email</label>
                 <input
@@ -113,67 +120,67 @@ function SettelmentForm() {
                 placeholder="Enter your Email"
                 required
                 />
-        </div>
+            </div>
 
-        <div className="mb-4 ">
-          <label htmlFor="name" className="block text-sm font-medium text-gray-600">Person Name</label>
-          <input
-            type="text" id="name" name="name" value={formData.name} onChange={handleChange}
-            className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Enter Your Name"
-            required
-          />
-        </div>
+            <div className="mb-4 ">
+              <label htmlFor="name" className="block text-sm font-medium text-gray-600">Person Name</label>
+              <input
+                type="text" id="name" name="name" value={formData.name} onChange={handleChange}
+                className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Enter Your Name"
+                required
+              />
+            </div>
 
-        <div className="mb-4 ">
-          <label htmlFor="advSetlDate" className="block text-sm font-medium text-gray-600">Advance Settelment Date</label>
-          <input
-            type="date" id="advSetlDate" name="advSetlDate" value={formData.advSetlDate} onChange={handleChange}
-            className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Enter your Advance Settelment Date"
-            required
-          />
-        </div>
+            <div className="mb-4 ">
+            <label htmlFor="advSetlDate" className="block text-sm font-medium text-gray-600">Advance Settelment Date</label>
+              <input
+              type="date" id="advSetlDate" name="advSetlDate" value={formData.advSetlDate} onChange={handleChange}
+              className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Enter your Advance Settelment Date"
+              required
+              />
+            </div>
 
-        <div className="mb-6 ">
-          <label htmlFor="area" className="block text-sm font-medium text-gray-600">Region / City / Area</label>
-          <input
-            type="text" id="area" name="area" value={formData.area} onChange={handleChange}
-            className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Enter your Area"
-            required
-          />
-        </div>
+            <div className="mb-6 ">
+            <label htmlFor="area" className="block text-sm font-medium text-gray-600">Region / City / Area</label>
+              <input
+                type="text" id="area" name="area" value={formData.area} onChange={handleChange}
+                className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Enter your Area"
+                required
+              />
+            </div>
 
-        <div className="mb-6 ">
-          <label htmlFor="placeProg" className="block text-sm font-medium text-gray-600">Place Of Program</label>
-          <input
-            type="text" id="placeProg" name="placeProg" value={formData.placeProg} onChange={handleChange}
-            className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-            placeholder="Enter Place Of Program"
-            required
-          />
-        </div>
+            <div className="mb-6 ">
+            <label htmlFor="placeProg" className="block text-sm font-medium text-gray-600">Place Of Program</label>
+              <input
+                type="text" id="placeProg" name="placeProg" value={formData.placeProg} onChange={handleChange}
+                className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                placeholder="Enter Place Of Program"
+                required
+              />
+            </div>
 
-        <div className="mb-6">
-  <label htmlFor="project" className="block text-sm font-medium text-gray-600">Project</label>
-  <select
-    id="project"
-    name="project"
-    value={formData.project}
-    onChange={handleChange}
-    className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-    required
-  >
-    <option value="" disabled defaultValue>Select Project</option>
-    <option value="ASK">ASK</option>
-    <option value="HDFC">HDFC</option>
-    <option value="APPI">APPI</option>
-    <option value="MIS">MIS</option>
-    <option value="SOCIAL PROTECTION">SOCIAL PROTECTION</option>
-    <option value="CHILD RIGHTS">CHILD RIGHTS</option>
-  </select>
-</div>
+            <div className="mb-6">
+            <label htmlFor="project" className="block text-sm font-medium text-gray-600">Project</label>
+            <select
+              id="project"
+              name="project"
+              value={formData.project}
+              onChange={handleChange}
+              className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
+            >
+                <option value="" disabled defaultValue>Select Project</option>
+                <option value="ASK">ASK</option>
+                <option value="HDFC">HDFC</option>
+                <option value="APPI">APPI</option>
+                <option value="MIS">MIS</option>
+                <option value="SOCIAL PROTECTION">SOCIAL PROTECTION</option>
+                <option value="CHILD RIGHTS">CHILD RIGHTS</option>
+            </select>
+            </div>
 
         <div className="mb-6 ">
           <label htmlFor="prjCode" className="block text-sm font-medium text-gray-600">Project Code</label>
@@ -194,7 +201,7 @@ function SettelmentForm() {
           />
         </div>
         <div className="mb-6 ">
-          <label htmlFor="dateProg" className="block text-sm font-medium text-gray-600">Date Of Program</label>
+          <label htmlFor="dateProg" className="block text-sm font-medium text-gray-600">Date Of Program(From/On)</label>
           <input
             type="date" id="dateProg" name="dateProg"  value={formData.dateProg} onChange={handleChange}
             className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -202,6 +209,36 @@ function SettelmentForm() {
             required
           />
         </div>
+       
+        <div className="mb-6 flex items-center gap-2">
+            <input
+              type="checkbox"
+              id="isMultiDay"
+              checked={isMultiDay}
+              onChange={() => setIsMultiDay(!isMultiDay)}
+              className="w-5 h-5"
+            />
+            <label htmlFor="isMultiDay" className="text-sm font-medium text-gray-600">
+              Is your program more than one day?
+            </label>
+          </div>
+
+          {isMultiDay && (
+            <div className="mb-6">
+              <label htmlFor="ToDate" className="block text-sm font-medium text-gray-600">
+                Date of Program (To)
+              </label>
+              <input
+                type="date"
+                id="ToDate"
+                name="ToDate"
+                value={formData.ToDate}
+                onChange={handleChange}
+                className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                required
+              />
+            </div>
+          )}
 
         <div className="mb-6 ">
           <label htmlFor="progTitle" className="block text-sm font-medium text-gray-600">Program Title</label>
@@ -271,7 +308,7 @@ function SettelmentForm() {
         </div>
 
         <div className="mb-4 ">
-          <label htmlFor="accom " className="block text-sm font-medium text-gray-600">Accommodation & Hall </label>
+          <label htmlFor="accom " className="block text-sm font-medium text-gray-600">Accommodation/Hall </label>
           <input
             type="number" id="accom" name="accom" value={formData.accom} onChange={handleChange}
             className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -335,7 +372,7 @@ function SettelmentForm() {
 
             <div className=' md:grid grid-cols-2 gap-4'>
             <div className="mb-4 ">
-          <label htmlFor="vendor" className="block text-sm font-medium text-gray-600">Vendor Cost</label>
+          <label htmlFor="vendor" className="block text-sm font-medium text-gray-600">Expenses Incurred By Vendor</label>
           <input
             type="number" id="vendor" name="vendor" value={formData.vendor} onChange={handleChange}  
             className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -345,7 +382,7 @@ function SettelmentForm() {
         </div>
 
         <div className="mb-4 ">
-          <label htmlFor="individual" className="block text-sm font-medium text-gray-600">Individual Cost</label>
+          <label htmlFor="individual" className="block text-sm font-medium text-gray-600">Expenses Incurred By Individual</label>
           <input
             type="number" id="individual"  name="individual" value={formData.individual} onChange={handleChange}  
             className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -371,7 +408,7 @@ function SettelmentForm() {
             type="number" id="receivable" name="receivable" value={formData.receivable} onChange={handleChange}
             className="mt-2 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
             placeholder="Enter Your Amount"
-            required
+            disabled
           />
         </div>
 

@@ -109,6 +109,9 @@ const PdfGenrator = ({ formData }) => {
             <span className="text-blue-600">Date Of Program:</span> {formData.dateProg}
           </p>
           <p className="mb-2 text-left">
+            <span className="text-blue-600 font-bold">Date Of Program(To):</span> {formData.ToDate}
+          </p>
+          <p className="mb-2 text-left">
             <span className="text-blue-600">Coversheet Number:</span> {formData.coversheet}
           </p>
           <p className="mb-2 text-left">
