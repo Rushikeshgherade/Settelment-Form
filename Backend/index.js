@@ -5,7 +5,14 @@ import cors from 'cors'
 import addSettelment from "./route/stl.js"
 
 const app = express()
-app.use(cors());
+// Configure CORS to allow requests from your frontend domain
+app.use(
+    cors({
+      origin: "https://settelment-form-wcvt-rushikesh-gherades-projects.vercel.app", // Replace with your frontend URL
+      methods: ["GET", "POST", "PUT", "DELETE"], // Allowed methods
+      credentials: true, // Include cookies if needed
+    })
+  );
 app.use(express.json());
 dotenv.config()
 
